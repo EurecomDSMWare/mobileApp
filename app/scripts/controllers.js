@@ -27,7 +27,7 @@ angular.module('MobileApp.controllers', [])
   var checkDelta = (function () {
     var prevTasks = null;
 
-    return function checkDelta() {
+    return function checkDelta(sync) {
       var changedTasks = [];
       var newTasks = [];
 
@@ -74,9 +74,40 @@ angular.module('MobileApp.controllers', [])
         }
       });
 
+      // TODO: fix the delta calculation
       console.log(newTasks, changedTasks);
+
+      if ( newTasks.length > 0 || changedTasks.length > 0 ) {
+
+        if ( sync ) {
+
+          $scope.syncLoading = true;
+          var newTasksAdded = 0;
+
+          angular.forEach(newTasks, function(task) {
+            wunderlist.addTask(task, function(returnedTask) {
+              newTasksAdded ++;
+
+              if ( newTasksAdded === newTasks.length ) {
+                $scope.syncLoading = false;
+              }
+            });
+          });
+        }
+
+        else {
+          $scope.enableSync = true;
+          return;
+        }
+      }
+
+      $scope.enableSync = false;
     };
   })();
+
+  $scope.sync = function() {
+    checkDelta(true);
+  };
 
   $scope.addTask = function(title) {
     $scope.tasks.unshift({

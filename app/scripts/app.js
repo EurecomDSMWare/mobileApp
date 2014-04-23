@@ -130,6 +130,20 @@ myApp.factory('wunderlist', function ($http, $location) {
       })
     },
 
+    addTask: function addTask(task, callback) {
+      this.authHttp({
+        url: apiUrl + '/me/tasks',
+        method: 'POST',
+        data: task
+      })
+      .success(function(task) {
+        callback(null, task);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
     login: function login(email, password, callback) {
 
       $http({

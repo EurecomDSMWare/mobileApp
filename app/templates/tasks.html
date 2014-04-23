@@ -25,8 +25,9 @@
       <button ng-disabled="!enableDeleteTasks" class="button button-clear">
         <i class="icon ion-trash-a"></i> Clear completed
       </button>
-      <button ng-disabled="!enableSync" class="button button-clear pull-right">
-        <i class="icon ion-loop"></i> Synchronize
+      <button ng-click="sync()" ng-disabled="!enableSync" class="button button-clear pull-right">
+        <i ng-hide="syncLoading" class="icon ion-loop"></i>
+        <i ng-show="syncLoading" class="icon ion-looping"></i> Synchronize
       </button>
     </div>
   </ion-footer-bar>
