@@ -1,0 +1,28 @@
+<ion-view title="Sign in">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <form name="form" ng-submit="login(email, password)">
+      <div ng-show="loginError" class="card alert-danger">
+        <div class="item item-text-wrap">
+          Wrong credentials!
+        </div>
+      </div>
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input name="email" required type="email" ng-model="email" placeholder="email">
+        </label>
+        <label class="item item-input">
+          <input name="password" required type="password" ng-model="password" placeholder="password">
+        </label>
+      </div>
+      <div class="padding">
+        <i ng-show="loading" class="ion-looping busy"></i>
+        <button ng-hide="loading" ng-disabled="form.$invalid" type="submit" class="button button-positive">
+          Sign in
+        </button>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

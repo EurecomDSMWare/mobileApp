@@ -6,7 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
+var myApp = angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -26,6 +26,16 @@ angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
       controller: 'AppCtrl'
     })
 
+    .state('app.login', {
+      url: '/login',
+      views: {
+        'menuContent' :{
+          templateUrl: 'templates/login.html',
+          controller: 'LoginCtrl'
+        }
+      }
+    })
+
     .state('app.search', {
       url: '/search',
       views: {
@@ -43,12 +53,12 @@ angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+    .state('app.tasks', {
+      url: '/tasks/:id',
       views: {
         'menuContent' :{
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
+          templateUrl: 'templates/tasks.html',
+          controller: 'TasksCtrl'
         }
       }
     })
@@ -63,6 +73,85 @@ angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/login');
 });
 
+myApp.factory('wunderlist', function ($http, $location) {
+  var apiUrl = 'https://api.wunderlist.com';
+
+  var authToken = null;
+
+  var wunderlist = {
+
+    initApp: function initApp() {
+      if ( !this.isSignedIn() ) {
+        $location.path('/app/login');
+        return false;
+      }
+      return true;
+    },
+
+    isSignedIn: function isSignedIn() {
+      return authToken !== null;
+    },
+
+    authHttp: function(options) {
+      var withAuth = angular.extend({
+        headers: {
+          Authorization: 'Bearer ' + this.getAuthToken()
+        }
+      }, options);
+      return $http(withAuth);
+    },
+
+    getAuthToken: function getAuthToken() {
+      return authToken;
+    },
+
+    getTasks: function getTasks(listId, callback) {
+      this.authHttp({
+        url: apiUrl + '/me/tasks',
+        method: 'GET'
+      })
+      .success(function(allTasks) {
+        var tasks = [];
+
+        // Return only tasks for that matches this wanted task list
+        angular.forEach(allTasks, function(task) {
+          if ( task.list_id === listId ) {
+            tasks.push(task);
+          }
+        });
+
+        callback(null, tasks);
+      })
+      .error(function(error) {
+        callback(error);
+      })
+    },
+
+    login: function login(email, password, callback) {
+
+      $http({
+        url: apiUrl + '/login',
+        data: {
+          email: email,
+          password: password
+        },
+        method: 'POST'
+      })
+      .success(function(data) {
+        // Save login response
+        window.localStorage.setItem('user', JSON.stringify(data));
+        authToken = data.token;
+        callback(null, true);
+      })
+      .error(function(data) {
+        callback(data);
+      });
+    }
+
+  };
+
+  return wunderlist;
+});

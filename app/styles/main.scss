@@ -1,0 +1,47 @@
+/* Your app's SASS, go crazy, make it your own */
+
+.ionic-logo {
+  display: block;
+  margin: 15px auto;
+  width: 96px;
+  height: 96px;
+}
+
+i.busy {
+  font-size:3em;
+  display:block;
+  text-align:center;
+}
+
+.alert-danger,
+.alert-danger .item {
+  background:#f2dede;
+  color:#a94442;
+}
+
+i.checkbox  {
+  display:inline-block;
+  width:1.5em;
+  height:1.5em;
+  border:1px solid #444;
+  border-radius:6px;
+  vertical-align:middle;
+  margin-top:-3px;
+  margin-right:.5em;
+}
+
+i.checkbox:before {
+  visibility:hidden;
+  position: relative;
+  right: 5px;
+  bottom: 5px;
+  font-size: 1.2em;
+}
+
+.list .completed {
+  color:gray;
+}
+
+.completed i.checkbox:before {
+  visibility:visible;
+}

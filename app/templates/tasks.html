@@ -1,0 +1,33 @@
+<ion-view title="{{list.title}} ({{tasks.length}})">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <i ng-show="loading" class="ion-looping busy"></i>
+
+    <div class="list">
+      <form ng-submit="addTask(newTask)">
+        <label class="item item-input">
+          <input type="text" ng-model="newTask" placeholder="Add task">
+        </label>
+      </form>
+    </div>
+
+    <ul ng-hide="loading" class="list">
+      <li class="item" ng-repeat="task in tasks" ng-class="{completed: task.completed_at != null}">
+        <i class="checkbox icon ion-android-checkmark" ng-click="toggleTask($index)"></i>
+        {{task.title}}
+      </li>
+    </ul>
+  </ion-content>
+  <ion-footer-bar class="bar-dark">
+    <div class="buttons">
+      <button ng-disabled="!enableDeleteTasks" class="button button-clear">
+        <i class="icon ion-trash-a"></i> Clear completed
+      </button>
+      <button ng-disabled="!enableSync" class="button button-clear pull-right">
+        <i class="icon ion-loop"></i> Synchronize
+      </button>
+    </div>
+  </ion-footer-bar>
+</ion-view>
