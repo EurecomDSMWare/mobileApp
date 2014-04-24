@@ -1,11 +1,7 @@
+/*jshint camelcase: false */
+/*global StatusBar: false */
 'use strict';
-// Ionic Starter App, v0.9.20
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
 var myApp = angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
 
 .run(function($ionicPlatform) {
@@ -127,7 +123,7 @@ myApp.factory('wunderlist', function ($http, $location) {
       })
       .error(function(error) {
         callback(error);
-      })
+      });
     },
 
     addTask: function addTask(task, callback) {
@@ -135,6 +131,25 @@ myApp.factory('wunderlist', function ($http, $location) {
         url: apiUrl + '/me/tasks',
         method: 'POST',
         data: task
+      })
+      .success(function(task) {
+        callback(null, task);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
+    setTaskDone: function setTaskDone(task, callback) {
+      this.authHttp({
+        url: apiUrl + '/' + task.id,
+        method: 'PUT',
+        data: {
+          id: task.id,
+          completed_at: new Date().toISOString(),
+          type: 'Task',
+          position: 0 // Don't know if this is needed and what it's used for..
+        }
       })
       .success(function(task) {
         callback(null, task);

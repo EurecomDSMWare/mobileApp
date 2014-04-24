@@ -1,3 +1,4 @@
+/*jshint camelcase: false */
 'use strict';
 angular.module('MobileApp.controllers', [])
 
@@ -5,7 +6,9 @@ angular.module('MobileApp.controllers', [])
 })
 
 .controller('TasksCtrl', function($scope, wunderlist, $stateParams) {
-  if ( ! wunderlist.initApp() ) return;
+  if ( ! wunderlist.initApp() ) {
+    return;
+  }
 
   $scope.loading = true;
 
@@ -40,10 +43,18 @@ angular.module('MobileApp.controllers', [])
   };
 
   $scope.toggleTask = function(index) {
+    $scope.syncLoading = true;
+
     if ( $scope.tasks[index].completed_at === null ) {
       $scope.tasks[index].completed_at = new Date();
+      wunderlist.setTaskDone($scope.tasks[index], function(error, task) {
+        $scope.syncLoading = false;
+        $scope.tasks[index] = task;
+      });
     }
+
     else {
+      // TODO
       $scope.tasks[index].completed_at = null;
     }
   };
