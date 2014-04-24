@@ -6,7 +6,7 @@
     <i ng-show="loading" class="ion-looping busy"></i>
 
     <div class="list">
-      <form ng-submit="addTask(newTask)">
+      <form ng-submit="addTask(newTask);newTask = '';">
         <label class="item item-input">
           <input type="text" ng-model="newTask" placeholder="Add task">
         </label>
@@ -14,7 +14,7 @@
     </div>
 
     <ul ng-hide="loading" class="list">
-      <li class="item" ng-repeat="task in tasks" ng-class="{completed: task.completed_at != null}">
+      <li class="item fade-in" ng-repeat="task in tasks" ng-class="{completed: task.completed_at != null}">
         <i class="checkbox icon ion-android-checkmark" ng-click="toggleTask($index)"></i>
         {{task.title}}
       </li>
@@ -25,9 +25,8 @@
       <button ng-disabled="!enableDeleteTasks" class="button button-clear">
         <i class="icon ion-trash-a"></i> Clear completed
       </button>
-      <button ng-click="sync()" ng-disabled="!enableSync" class="button button-clear pull-right">
-        <i ng-hide="syncLoading" class="icon ion-loop"></i>
-        <i ng-show="syncLoading" class="icon ion-looping"></i> Synchronize
+      <button ng-show="syncLoading" class="button button-clear">
+        <i class="icon ion-looping"></i> working
       </button>
     </div>
   </ion-footer-bar>
