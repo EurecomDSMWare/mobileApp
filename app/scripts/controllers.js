@@ -48,14 +48,19 @@ angular.module('MobileApp.controllers', [])
     if ( $scope.tasks[index].completed_at === null ) {
       $scope.tasks[index].completed_at = new Date();
       wunderlist.setTaskDone($scope.tasks[index], function(error, task) {
+        // TODO: error handling
         $scope.syncLoading = false;
         $scope.tasks[index] = task;
       });
     }
 
     else {
-      // TODO
       $scope.tasks[index].completed_at = null;
+      wunderlist.setTaskNotDone($scope.tasks[index], function(error, task) {
+        // TODO: error handling
+        $scope.syncLoading = false;
+        $scope.tasks[index] = task;
+      });
     }
   };
 })

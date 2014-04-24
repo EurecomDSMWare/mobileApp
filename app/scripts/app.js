@@ -141,12 +141,20 @@ myApp.factory('wunderlist', function ($http, $location) {
     },
 
     setTaskDone: function setTaskDone(task, callback) {
+      this.setTaskCompletedAt(task, new Date().toISOString(), callback);
+    },
+
+    setTaskNotDone: function setTaskNotDone(task, callback) {
+      this.setTaskCompletedAt(task, null, callback);
+    },
+
+    setTaskCompletedAt: function setTaskDone(task, completedAt, callback) {
       this.authHttp({
         url: apiUrl + '/' + task.id,
         method: 'PUT',
         data: {
           id: task.id,
-          completed_at: new Date().toISOString(),
+          completed_at: completedAt,
           type: 'Task',
           position: 0 // Don't know if this is needed and what it's used for..
         }
