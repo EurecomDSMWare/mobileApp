@@ -16,11 +16,8 @@
         <ion-item nav-clear menu-close href="#/app/tasks/inbox">
           Inbox
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/browse">
-          Browse
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/playlists">
-          Playlists
+        <ion-item ng-repeat="list in lists" nav-clear menu-close href="#/app/tasks/{{list.id}}">
+          {{list.title}}
         </ion-item>
       </ion-list>
     </ion-content>

@@ -2,10 +2,18 @@
 'use strict';
 angular.module('MobileApp.controllers', [])
 
-.controller('AppCtrl', function($scope) {
+.controller('AppCtrl', function($scope, wunderlist) {
+
+  $scope.$on('login', function() {
+    wunderlist.getLists(function(error, lists) {
+      $scope.lists = lists;
+    });
+  });
+
 })
 
 .controller('TasksCtrl', function($scope, wunderlist, $stateParams) {
+
   if ( ! wunderlist.initApp() ) {
     return;
   }
@@ -19,7 +27,10 @@ angular.module('MobileApp.controllers', [])
     };
   }
   else {
-    // TODO
+    $scope.list = {
+      id: $stateParams.id,
+      title: wunderlist.getListFromId($stateParams.id).title
+    };
   }
 
   wunderlist.getTasks($scope.list.id, function(error, tasks) {
@@ -123,6 +134,7 @@ angular.module('MobileApp.controllers', [])
       }
 
       else {
+        $scope.$emit('login');
         $location.path('/app/tasks/inbox');
       }
 

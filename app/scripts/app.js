@@ -77,11 +77,15 @@ myApp.factory('wunderlist', function ($http, $location) {
 
   var authToken = null;
 
+  var cachedLists;
+
   var wunderlist = {
 
     initApp: function initApp() {
       if ( !this.isSignedIn() ) {
-        $location.path('/app/login');
+        if ( $location.path() !== '/app/login' ) {
+          $location.path('/app/login');
+        }
         return false;
       }
       return true;
@@ -159,6 +163,32 @@ myApp.factory('wunderlist', function ($http, $location) {
 
     setTaskNotDone: function setTaskNotDone(task, callback) {
       this.setTaskCompletedAt(task, null, callback);
+    },
+
+    getLists: function getLists(callback) {
+      this.authHttp({
+        url: apiUrl + '/me/lists',
+        method: 'GET'
+      })
+      .success(function(lists) {
+        cachedLists = lists;
+        callback(null, lists);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
+    getListFromId: function getListTitleFromId(listId) {
+      if ( !cachedLists ) {
+        throw 'Tried to get list title before lists were initialized';
+      }
+
+      for ( var i = 0; i < cachedLists.length; i ++ ) {
+        if ( cachedLists[i].id === listId ) {
+          return cachedLists[i];
+        }
+      }
     },
 
     setTaskCompletedAt: function setTaskDone(task, completedAt, callback) {
