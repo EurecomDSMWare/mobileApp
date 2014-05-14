@@ -27,6 +27,45 @@ angular.module('MobileApp.controllers', [])
     $scope.tasks = tasks;
   });
 
+  $scope.hasCompletedTasks = function() {
+
+    // Exit if tasks are not yet loaded
+    if ( !$scope.tasks ) {
+      return false;
+    }
+
+    for ( var i = 0; i < $scope.tasks.length; i ++ ) {
+      if ( $scope.tasks[i].completed_at !== null ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  $scope.removeTaskFromList = function(targetTask) {
+    angular.forEach($scope.tasks, function(task, index) {
+      if ( task.id === targetTask.id ) {
+        $scope.tasks.splice(index, 1);
+      }
+    });
+  };
+
+  $scope.clearCompleted = function() {
+    angular.forEach($scope.tasks, function(task, index) {
+      if ( task.completed_at !== null ) {
+        wunderlist.removeTask(task, function(error) {
+          if ( error ) {
+            alert('An error occurred when clearing the task(s)');
+          }
+          else {
+            $scope.removeTaskFromList(task);
+          }
+        });
+      }
+    });
+  };
+
   $scope.addTask = function(title) {
     $scope.syncLoading = true;
 
@@ -35,10 +74,14 @@ angular.module('MobileApp.controllers', [])
       list_id: $scope.list.id
     };
 
-    $scope.tasks.unshift(task);
-
-    wunderlist.addTask(task, function(returnedTask) {
+    wunderlist.addTask(task, function(error, returnedTask) {
       $scope.syncLoading = false;
+      if ( error ) {
+        alert('An error occurred when adding task');
+      }
+      else {
+        $scope.tasks.unshift(returnedTask);
+      }
     });
   };
 

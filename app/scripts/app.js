@@ -140,6 +140,19 @@ myApp.factory('wunderlist', function ($http, $location) {
       });
     },
 
+    removeTask: function(task, callback) {
+      this.authHttp({
+        url: apiUrl + '/' + task.id,
+        method: 'DELETE'
+      })
+      .success(function(task) {
+        callback(null, task);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
     setTaskDone: function setTaskDone(task, callback) {
       this.setTaskCompletedAt(task, new Date().toISOString(), callback);
     },

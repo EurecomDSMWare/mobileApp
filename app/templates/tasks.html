@@ -14,15 +14,15 @@
     </div>
 
     <ul ng-hide="loading" class="list">
-      <li class="item fade-in" ng-repeat="task in tasks" ng-class="{completed: task.completed_at != null}">
+      <li class="item" ng-repeat="task in tasks" ng-class="{completed: task.completed_at != null}">
         <i class="checkbox icon ion-android-checkmark" ng-click="toggleTask($index)"></i>
         {{task.title}}
       </li>
     </ul>
   </ion-content>
-  <ion-footer-bar class="bar-dark">
+  <ion-footer-bar ng-show="syncLoading || hasCompletedTasks()" class="bar-dark">
     <div class="buttons">
-      <button ng-disabled="!enableDeleteTasks" class="button button-clear">
+      <button ng-click="clearCompleted()" ng-disabled="!hasCompletedTasks()" class="button button-clear">
         <i class="icon ion-trash-a"></i> Clear completed
       </button>
       <button ng-show="syncLoading" class="button button-clear">
