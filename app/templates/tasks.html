@@ -8,7 +8,7 @@
   <ion-content class="has-header">
     <i ng-show="loading" class="ion-looping busy"></i>
 
-    <div ng-hide="loading" class="list">
+    <div ng-hide="loading || starredView" class="list">
       <form ng-submit="addTask(newTask);newTask = '';">
         <label class="item item-input addInput">
           <i class="ion-plus-round"></i>

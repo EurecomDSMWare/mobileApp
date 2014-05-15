@@ -49,6 +49,7 @@ angular.module('MobileApp.controllers', [])
     };
   }
   else if ( $stateParams.id === 'starred' ) {
+    $scope.starredView = true;
     $scope.list = {
       id: $stateParams.id,
       title: 'Starred'
