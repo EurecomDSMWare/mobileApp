@@ -46,15 +46,20 @@ i.checkbox:before {
   visibility:visible;
 }
 
-.addList i {
+.addInput i {
   display: inline-block;
-  padding-top: 8px;
   font-size: 1.2em;
   padding-left: 10px;
   margin-right: 10px;
   color:#b1aaaa;
 }
 
-ion-side-menu h1 .ion-looping {
-  font-size:1.2em;
+ion-side-menu {
+  h1 .ion-looping {
+    font-size:1.2em;
+  }
+
+  .addInput i {
+    padding-top:8px;
+  }
 }

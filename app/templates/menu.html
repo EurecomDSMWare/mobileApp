@@ -22,7 +22,7 @@
         <ion-item ng-repeat="list in lists" nav-clear menu-close href="#/app/tasks/{{list.id}}">
           {{list.title}}
         </ion-item>
-        <div class="bar bar-light addList">
+        <div class="bar bar-light addInput">
           <i class="ion-plus-round"></i> <input ng-model="data.newListTitle" ng-keydown="$event.keyCode === 13 ? addList() : null" type="text" placeholder="Add a list">
         </div>
       </ion-list>

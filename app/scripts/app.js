@@ -49,6 +49,7 @@ var myApp = angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
         }
       }
     })
+
     .state('app.tasks', {
       url: '/tasks/:id',
       views: {
@@ -68,6 +69,7 @@ var myApp = angular.module('MobileApp', ['ionic', 'MobileApp.controllers'])
         }
       }
     });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
 });
@@ -135,6 +137,19 @@ myApp.factory('wunderlist', function ($http, $location) {
         url: apiUrl + '/me/tasks',
         method: 'POST',
         data: task
+      })
+      .success(function(task) {
+        callback(null, task);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
+    removeList: function(list, callback) {
+      this.authHttp({
+        url: apiUrl + '/' + list.id,
+        method: 'DELETE'
       })
       .success(function(task) {
         callback(null, task);

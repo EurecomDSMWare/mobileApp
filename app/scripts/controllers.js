@@ -1,4 +1,4 @@
-/*jshint camelcase: false */
+/*jshint camelcase: false, devel:true */
 'use strict';
 angular.module('MobileApp.controllers', [])
 
@@ -6,7 +6,7 @@ angular.module('MobileApp.controllers', [])
 
   $scope.data = {};
 
-  $scope.$on('login', function() {
+  $scope.$on('updateLists', function() {
     wunderlist.getLists(function(error, lists) {
       $scope.lists = lists;
     });
@@ -34,7 +34,7 @@ angular.module('MobileApp.controllers', [])
 
 })
 
-.controller('TasksCtrl', function($scope, wunderlist, $stateParams) {
+.controller('TasksCtrl', function($scope, wunderlist, $stateParams, $location) {
 
   if ( ! wunderlist.initApp() ) {
     return;
@@ -49,6 +49,7 @@ angular.module('MobileApp.controllers', [])
     };
   }
   else {
+    $scope.canDeleteList = true;
     $scope.list = {
       id: $stateParams.id,
       title: wunderlist.getListFromId($stateParams.id).title
@@ -59,6 +60,22 @@ angular.module('MobileApp.controllers', [])
     $scope.loading = false;
     $scope.tasks = tasks;
   });
+
+  $scope.removeList = function() {
+    if ( confirm('The list and its tasks will be deleted. Do you want to continue?') ) {
+      $scope.loading = true;
+      wunderlist.removeList($scope.list, function(error) {
+        $scope.loading = false;
+        if ( error ) {
+          alert('An error occurred removing the list');
+        }
+        else {
+          $scope.$emit('updateLists');
+          $location.path('/app/tasks/inbox');
+        }
+      });
+    }
+  };
 
   $scope.hasCompletedTasks = function() {
 
@@ -85,7 +102,7 @@ angular.module('MobileApp.controllers', [])
   };
 
   $scope.clearCompleted = function() {
-    angular.forEach($scope.tasks, function(task, index) {
+    angular.forEach($scope.tasks, function(task) {
       if ( task.completed_at !== null ) {
         wunderlist.removeTask(task, function(error) {
           if ( error ) {
@@ -147,7 +164,7 @@ angular.module('MobileApp.controllers', [])
 
     $scope.loading = true;
 
-    wunderlist.login(email, password, function (error, success) {
+    wunderlist.login(email, password, function (error) {
 
       $scope.loading = false;
 
@@ -156,7 +173,7 @@ angular.module('MobileApp.controllers', [])
       }
 
       else {
-        $scope.$emit('login');
+        $scope.$emit('updateLists');
         $location.path('/app/tasks/inbox');
       }
 
