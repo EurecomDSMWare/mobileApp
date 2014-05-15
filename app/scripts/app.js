@@ -120,12 +120,33 @@ myApp.factory('wunderlist', function ($http, $location) {
 
         // Return only tasks for that matches this wanted task list
         angular.forEach(allTasks, function(task) {
-          if ( task.list_id === listId ) {
+          if ( listId === 'starred' && task.starred ) {
+            tasks.push(task);
+          }
+          else if ( task.list_id === listId ) {
             tasks.push(task);
           }
         });
 
         callback(null, tasks);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
+    setTaskStarredStatus: function setTaskStarredStatus(task, starred, callback) {
+      this.authHttp({
+        url: apiUrl + '/' + task.id,
+        method: 'PUT',
+        data: {
+          id: task.id,
+          starred: starred,
+          type: 'Task'
+        }
+      })
+      .success(function(task) {
+        callback(null, task);
       })
       .error(function(error) {
         callback(error);

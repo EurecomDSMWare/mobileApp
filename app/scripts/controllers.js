@@ -48,6 +48,12 @@ angular.module('MobileApp.controllers', [])
       title: 'Inbox'
     };
   }
+  else if ( $stateParams.id === 'starred' ) {
+    $scope.list = {
+      id: $stateParams.id,
+      title: 'Starred'
+    };
+  }
   else {
     $scope.canDeleteList = true;
     $scope.list = {
@@ -60,6 +66,41 @@ angular.module('MobileApp.controllers', [])
     $scope.loading = false;
     $scope.tasks = tasks;
   });
+
+  $scope.setStarred = function(task) {
+    task.starred = true;
+
+    $scope.syncLoading = true;
+
+    wunderlist.setTaskStarredStatus(task, true, function(error) {
+      $scope.syncLoading = false;
+
+      if ( error ) {
+        alert('An error occurred when trying to star task');
+        task.starred = false;
+      }
+    });
+  };
+
+  $scope.setNotStarred = function(task) {
+    task.starred = false;
+
+    // If we are in Starred-view, remove task when unstarred
+    if ( $scope.list.id === 'starred' ) {
+      $scope.removeTaskFromList(task);
+    }
+
+    $scope.syncLoading = true;
+
+    wunderlist.setTaskStarredStatus(task, false, function(error) {
+      $scope.syncLoading = false;
+
+      if ( error ) {
+        alert('An error occurred when trying to unstar task');
+        task.starred = true;
+      }
+    });
+  };
 
   $scope.removeList = function() {
     if ( confirm('The list and its tasks will be deleted. Do you want to continue?') ) {

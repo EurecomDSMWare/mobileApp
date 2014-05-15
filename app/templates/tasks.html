@@ -21,6 +21,8 @@
       <li class="item" ng-repeat="task in tasks" ng-class="{completed: task.completed_at != null}">
         <i class="checkbox icon ion-android-checkmark" ng-click="toggleTask($index)"></i>
         {{task.title}}
+        <i ng-click="setStarred(task)" ng-hide="task.starred" class="icon starTask ion-ios7-star-outline"></i>
+        <i ng-click="setNotStarred(task)" ng-show="task.starred" class="icon starTask ion-ios7-star"></i>
       </li>
     </ul>
   </ion-content>
