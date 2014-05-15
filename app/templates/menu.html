@@ -9,7 +9,10 @@
 
   <ion-side-menu side="left">
     <header class="bar bar-header bar-stable">
-      <h1 class="title">Menu</h1>
+      <h1 class="title">
+          Lists
+          <i ng-show="loading" class="icon ion-looping"></i>
+      </h1>
     </header>
     <ion-content class="has-header">
       <ion-list>
@@ -19,6 +22,9 @@
         <ion-item ng-repeat="list in lists" nav-clear menu-close href="#/app/tasks/{{list.id}}">
           {{list.title}}
         </ion-item>
+        <div class="bar bar-light addList">
+          <i class="ion-plus-round"></i> <input ng-model="data.newListTitle" ng-keydown="$event.keyCode === 13 ? addList() : null" type="text" placeholder="Add a list">
+        </div>
       </ion-list>
     </ion-content>
   </ion-side-menu>

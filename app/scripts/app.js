@@ -191,6 +191,20 @@ myApp.factory('wunderlist', function ($http, $location) {
       }
     },
 
+    addList: function addList(list, callback) {
+      this.authHttp({
+        url: apiUrl + '/me/lists',
+        method: 'POST',
+        data: list
+      })
+      .success(function(list) {
+        callback(null, list);
+      })
+      .error(function(error) {
+        callback(error);
+      });
+    },
+
     setTaskCompletedAt: function setTaskDone(task, completedAt, callback) {
       this.authHttp({
         url: apiUrl + '/' + task.id,

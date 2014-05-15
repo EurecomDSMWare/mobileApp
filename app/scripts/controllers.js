@@ -4,11 +4,33 @@ angular.module('MobileApp.controllers', [])
 
 .controller('AppCtrl', function($scope, wunderlist) {
 
+  $scope.data = {};
+
   $scope.$on('login', function() {
     wunderlist.getLists(function(error, lists) {
       $scope.lists = lists;
     });
   });
+
+  $scope.addList = function() {
+    var newList = {
+      title: $scope.data.newListTitle
+    };
+
+    $scope.loading = true;
+
+    wunderlist.addList(newList, function(error, list) {
+      $scope.loading = false;
+      if ( error ) {
+        alert('An error occurred when creating new list');
+      }
+      else {
+        $scope.lists.push(list);
+      }
+    });
+
+    $scope.data.newListTitle = '';
+  };
 
 })
 
