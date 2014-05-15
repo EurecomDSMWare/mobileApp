@@ -7,6 +7,8 @@ angular.module('MobileApp.controllers', [])
   $scope.data = {};
 
   $scope.$on('updateLists', function() {
+    $scope.loggedIn = true;
+
     wunderlist.getLists(function(error, lists) {
       $scope.lists = lists;
     });
@@ -183,18 +185,31 @@ angular.module('MobileApp.controllers', [])
     if ( $scope.tasks[index].completed_at === null ) {
       $scope.tasks[index].completed_at = new Date();
       wunderlist.setTaskDone($scope.tasks[index], function(error, task) {
-        // TODO: error handling
         $scope.syncLoading = false;
-        $scope.tasks[index] = task;
+
+        if ( error ) {
+          $scope.tasks[index].completed_at = null;
+          alert('An error occurred when trying to mark task as done');
+        }
+        else {
+          $scope.tasks[index] = task;
+        }
       });
     }
 
     else {
+      var prevValue = $scope.tasks[index].completed_at;
       $scope.tasks[index].completed_at = null;
       wunderlist.setTaskNotDone($scope.tasks[index], function(error, task) {
-        // TODO: error handling
         $scope.syncLoading = false;
-        $scope.tasks[index] = task;
+
+        if ( error ) {
+          $scope.tasks[index].completed_at = prevValue;
+          alert('An error occurred when trying to mark task as not done');
+        }
+        else {
+          $scope.tasks[index] = task;
+        }
       });
     }
   };

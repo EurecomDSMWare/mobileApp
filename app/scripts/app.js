@@ -130,8 +130,8 @@ myApp.factory('wunderlist', function ($http, $location) {
 
         callback(null, tasks);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -148,8 +148,8 @@ myApp.factory('wunderlist', function ($http, $location) {
       .success(function(task) {
         callback(null, task);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -162,8 +162,8 @@ myApp.factory('wunderlist', function ($http, $location) {
       .success(function(task) {
         callback(null, task);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -175,8 +175,8 @@ myApp.factory('wunderlist', function ($http, $location) {
       .success(function(task) {
         callback(null, task);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -188,8 +188,8 @@ myApp.factory('wunderlist', function ($http, $location) {
       .success(function(task) {
         callback(null, task);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -210,8 +210,8 @@ myApp.factory('wunderlist', function ($http, $location) {
         cachedLists = lists;
         callback(null, lists);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -236,8 +236,8 @@ myApp.factory('wunderlist', function ($http, $location) {
       .success(function(list) {
         callback(null, list);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -255,8 +255,8 @@ myApp.factory('wunderlist', function ($http, $location) {
       .success(function(task) {
         callback(null, task);
       })
-      .error(function(error) {
-        callback(error);
+      .error(function() {
+        callback(true);
       });
     },
 
@@ -276,8 +276,8 @@ myApp.factory('wunderlist', function ($http, $location) {
         authToken = data.token;
         callback(null, true);
       })
-      .error(function(data) {
-        callback(data);
+      .error(function() {
+        callback(true);
       });
     }
 
